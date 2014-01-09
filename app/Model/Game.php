@@ -25,6 +25,9 @@ App::uses('AuthComponent', 'Controller/Component');
 
 class Game extends AppModel {
     public $name = 'Game';
+    var $belongsTo = array('Owner' => array('className' => 'User', 'foreignKey' => 'owner_id'),
+        'Opponent' => array('className' => 'User', 'foreignKey' => 'opponent_id')
+    );
     public $validate = array(
         'name' => array(
             'required' => array(

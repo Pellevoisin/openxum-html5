@@ -1,6 +1,10 @@
 Yinsh.RandomPlayer = function (color, engine) {
 
 // public methods
+    this.is_remote =function () {
+        return false;
+    };
+
     this.move_ring = function (origin) {
         var list = engine.get_possible_moving_list(origin, mycolor, false);
 

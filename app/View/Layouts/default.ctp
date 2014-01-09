@@ -52,57 +52,62 @@
 </head>
 <body>
 <div style="height: 60px;">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <?php
-                echo $this->Html->link(__('Home'), array('controller' => 'pages', 'action' => 'display', 'home'),
-                    array("class" => "navbar-brand"));
-                ?>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <?php if (AuthComponent::user('id') != 0): ?>
-                        <?php if (AuthComponent::user('role') == 'admin'): ?>
-                            <li>
-                                <?php
-                                echo $this->Html->link(__('Admin'),
-                                    array('controller' => 'users', 'index'));
-                                ?>
-                            </li>
-                        <?php else: ?>
-                            <li>
-                                <?php
-                                if (CakeSession::read('OpenXum.game') == '') {
-                                    echo $this->Html->link(__('Games'),
-                                        array('controller' => 'pages', 'action' => 'display', 'games'));
-                                } else {
-                                    echo $this->Html->link(__('Games').' ['.CakeSession::read('OpenXum.game').']',
-                                        array('controller' => 'pages', 'action' => 'display', 'games'));
-                                }
-                                ?>
-                            </li>
-                        <?php endif ?>
-                    <?php endif ?>
-                    <li><a href="#">Ranking</a></li>
-                    <li><a href="#">Help</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <?php
-                        if (AuthComponent::user('id') != 0) {
-                            echo $this->Html->link(__('Logout').' ['.AuthComponent::user('username').']',
-                                array('controller' => 'users', 'action' => 'logout'));
-                        } else {
-                            echo $this->Html->link('Sign in',
-                                array('controller' => 'users', 'action' => 'login'));
-                        }
-                        ?>
-                    </li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <?php
+            echo $this->Html->link(__('Home'),
+                array('controller' => 'pages', 'action' => 'display', 'home'),
+                array("class" => "navbar-brand"));
+            ?>
         </div>
-    </div>
+        <div class="navbar-collapse collapse" id="bs-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <?php if (AuthComponent::user('id') != 0): ?>
+                    <?php if (AuthComponent::user('role') == 'admin'): ?>
+                        <li>
+                            <?php
+                            echo $this->Html->link(__('Admin'),
+                                array('controller' => 'users', 'index'));
+                            ?>
+                        </li>
+                    <?php else: ?>
+                        <li>
+                            <?php
+                            if (CakeSession::read('OpenXum.game') == '') {
+                                echo $this->Html->link(__('Games'),
+                                    array('controller' => 'pages', 'action' => 'display', 'games'));
+                            } else {
+                                echo $this->Html->link(__('Games') . ' [' . CakeSession::read('OpenXum.game') . ']',
+                                    array('controller' => 'pages', 'action' => 'display', 'games'));
+                            }
+                            ?>
+                        </li>
+                    <?php endif ?>
+                <?php endif ?>
+                <li><a href="#">Ranking</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <?php
+                    if (AuthComponent::user('id') != 0) {
+                        echo $this->Html->link(__('Logout') . ' [' . AuthComponent::user('username') . ']',
+                            array('controller' => 'users', 'action' => 'logout'));
+                    } else {
+                        echo $this->Html->link('Sign in',
+                            array('controller' => 'users', 'action' => 'login'));
+                    }
+                    ?>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 
 <div id="#content">

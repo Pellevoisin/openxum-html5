@@ -9,6 +9,7 @@
     echo $this->Html->script('yinsh/Intersection');
     echo $this->Html->script('yinsh/Manager');
     echo $this->Html->script('yinsh/RandomPlayer');
+    echo $this->Html->script('yinsh/RemotePlayer');
     ?>
 
     <script language="javascript">
@@ -18,8 +19,16 @@
             var markerNumber = document.getElementById("markerNumber");
             var turnList = document.getElementById("turnList");
             var engine = new Yinsh.Engine(Yinsh.GameType.BLITZ, Yinsh.Color.BLACK);
-            var gui = new Yinsh.GuiPlayer(Yinsh.Color.BLACK, engine);
-            var other = new Yinsh.RandomPlayer(Yinsh.Color.WHITE, engine);
+            var gui = new Yinsh.GuiPlayer(<?php echo ($color == 'black' ? 0 : 1); ?>, engine);
+            var other;
+
+            if ( <?php echo $game_id; ?> === -1) {
+                other = new Yinsh.RandomPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
+            } else {
+                other = new Yinsh.RemotePlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine, <?php echo $owner_id; ?>,
+                    <?php echo $opponent_id; ?>, <?php echo $game_id; ?>);
+            }
+
             var manager = new Yinsh.Manager(engine, gui, other, new Yinsh.Status(markerNumber, turnList));
 
             if (canvas_div.clientHeight < canvas_div.clientWidth) {
@@ -31,10 +40,16 @@
             }
             gui.set_canvas(canvas);
             gui.set_manager(manager);
+
+            if ( <?php echo $game_id; ?> !== -1) {
+                other.set_manager(manager);
+            }
         });
-   </script>
+    </script>
 
 <!--    <div data-role="popup" id="popupWinner"></div> -->
+
+<!--    <?php echo 'play '.$game_id.' with '.$owner_id.' against '.$opponent_id.' with '.$color ?> -->
 
     <div class="row">
         <div class="col-md-3 visible-md visible-lg">

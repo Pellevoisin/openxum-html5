@@ -37,11 +37,13 @@ class GamesController extends AppController
     {
         if ($this->request->is('post')) {
             if ($this->request->data['Game']['type'] == 'ia') {
-                return $this->redirect(array('controller' => 'pages', 'action' => 'display',
-                    CakeSession::read('OpenXum.game')));
+                return $this->redirect(array('controller' => 'games', 'action' => 'play_'
+                    . CakeSession::read('OpenXum.game')));
             } else {
                 $this->Game->create();
-                $this->request->data['Game']['user_id'] = AuthComponent::user('id');
+                $this->request->data['Game']['owner_id'] = AuthComponent::user('id');
+                $this->request->data['Game']['status'] = 'wait';
+                $this->request->data['Game']['opponent_id'] = -1;
                 if ($this->Game->save($this->request->data)) {
                     return $this->redirect(array('action' => 'index'));
                 }
@@ -54,14 +56,23 @@ class GamesController extends AppController
         if (isset($this->params['named']['game'])) {
             CakeSession::write('OpenXum.game', $this->params['named']['game']);
         }
-        $games = $this->Game->find('all',
+        $my_online_games = $this->Game->find('all',
             array('conditions' => array('Game.game' => CakeSession::read('OpenXum.game'),
-            'Game.user_id' => AuthComponent::user('id'))));
-        $this->set('games', $games);
-    }
-
-    public function join()
-    {
+                'Game.owner_id' => AuthComponent::user('id'), 'Game.type' => 'online')));
+        $other_online_games = $this->Game->find('all',
+            array('conditions' => array('Game.game' => CakeSession::read('OpenXum.game'),
+                'Game.owner_id !=' => AuthComponent::user('id'), 'Game.type' => 'online'),
+                'recursive' => 1));
+        $my_offline_games = $this->Game->find('all',
+            array('conditions' => array('Game.game' => CakeSession::read('OpenXum.game'),
+                'Game.owner_id' => AuthComponent::user('id'), 'Game.type' => 'offline')));
+        $other_offline_games = $this->Game->find('all',
+            array('conditions' => array('Game.game' => CakeSession::read('OpenXum.game'),
+                'Game.owner_id !=' => AuthComponent::user('id'), 'Game.type' => 'offline')));
+        $this->set('my_online_games', $my_online_games);
+        $this->set('other_online_games', $other_online_games);
+        $this->set('my_offline_games', $my_offline_games);
+        $this->set('other_offline_games', $other_offline_games);
     }
 
     public function delete($id = null)
@@ -76,7 +87,27 @@ class GamesController extends AppController
         return $this->redirect(array('action' => 'index'));
     }
 
-    public function resume()
+    public function play_Yinsh()
     {
+        if (array_key_exists('game_id', $this->params['named'])) {
+            $this->set('game_id', $this->params['named']['game_id']);
+        } else {
+            $this->set('game_id', -1);
+        }
+        if (array_key_exists('owner_id', $this->params['named'])) {
+            $this->set('owner_id', $this->params['named']['owner_id']);
+        } else {
+            $this->set('owner_id', -1);
+        }
+        if (array_key_exists('opponent_id', $this->params['named'])) {
+            $this->set('opponent_id', $this->params['named']['opponent_id']);
+        } else {
+            $this->set('opponent_id', -1);
+        }
+        if (array_key_exists('color', $this->params['named'])) {
+            $this->set('color', $this->params['named']['color']);
+        } else {
+            $this->set('opponent_id', -1);
+        }
     }
 }
