@@ -29,9 +29,9 @@ class UsersController extends AppController
     }
 
     public function isAuthorized($user) {
-        if (isset($user['role']) && $user['role'] === 'admin') {
+//        if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
-        } else { return false; }
+//        } else { return false; }
     }
 
     public function index()
@@ -53,6 +53,7 @@ class UsersController extends AppController
     {
         if ($this->request->is('post')) {
             $this->User->create();
+            $this->User->ban = false;
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('L\'utilisateur a été sauvegardé'));
                 return $this->redirect(array('action' => 'index'));
@@ -102,7 +103,7 @@ class UsersController extends AppController
     {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
-                if (AuthComponent::user('role') === 'student') {
+                if (AuthComponent::user('role') === 'player') {
                     return $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
                 }
                 return $this->redirect($this->Auth->redirectUrl());

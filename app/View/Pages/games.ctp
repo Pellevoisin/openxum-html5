@@ -4,37 +4,37 @@
         <li>
             <?php
             echo $this->Html->link($this->Html->image('dvonn.jpg').'<h2>Dvonn</h2>',
-                array('controller' => 'pages', 'action' => 'display', 'dvonn'),
+                array('controller' => 'games', 'action' => 'index', 'game' => 'dvonn'),
                 array('escape' => false));
             ?>
         <li>
             <?php
             echo $this->Html->link($this->Html->image('invers.jpg').'<h2>Invers</h2>',
-                array('controller' => 'pages', 'action' => 'display', 'invers'),
+                array('controller' => 'games', 'action' => 'index', 'game' => 'invers'),
                 array('escape' => false));
             ?>
         <li>
             <?php
             echo $this->Html->link($this->Html->image('gipf.jpg').'<h2>Gipf</h2>',
-                array('controller' => 'pages', 'action' => 'display', 'gipf'),
+                array('controller' => 'games', 'action' => 'index', 'game' => 'gipf'),
                 array('escape' => false));
             ?>
         <li>
             <?php
             echo $this->Html->link($this->Html->image('tzaar.jpg').'<h2>Tzaar</h2>',
-                array('controller' => 'pages', 'action' => 'display', 'tzaar'),
+                array('controller' => 'games', 'action' => 'index', 'game' => 'tzaar'),
                 array('escape' => false));
             ?>
         <li>
             <?php
             echo $this->Html->link($this->Html->image('yinsh.jpg').'<h2>Yinsh</h2>',
-                array('controller' => 'pages', 'action' => 'display', 'yinsh'),
+                array('controller' => 'games', 'action' => 'index', 'game' => 'yinsh'),
                 array('escape' => false));
             ?>
         <li>
             <?php
             echo $this->Html->link($this->Html->image('zertz.jpg').'<h2>Zertz</h2>',
-                array('controller' => 'pages', 'action' => 'display', 'zertz'),
+                array('controller' => 'games', 'action' => 'index', 'game' => 'zertz'),
                 array('escape' => false));
             ?>
     </ul>

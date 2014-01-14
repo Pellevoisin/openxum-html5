@@ -21,13 +21,8 @@
  * @license       http://www.gnu.org/licenses/ GPLv3 License
  */
 
-class MaitresController extends AppController
+class GamesController extends AppController
 {
-    public $helpers = array('Html', 'Form', 'Session');
-    var $uses = array('Apprenti', 'Maitre', 'User', 'Validation', 'WorkflowLink');
-
-    var $name = 'Maitres';
-
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -35,139 +30,57 @@ class MaitresController extends AppController
 
     public function isAuthorized($user)
     {
-        if ($user['role'] === 'admin' && in_array($this->action, array('add', 'edit', 'delete', 'index'))) {
-            return true;
-        } else if ($user['role'] === 'manager' && in_array($this->action, array('view'))) {
-            return true;
-        } else if ($user['role'] === 'external' && in_array($this->action, array('validation'))) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
-    public function add()
+    public function choice()
+    {
+    }
+
+    public function create()
     {
         if ($this->request->is('post')) {
-
-            $this->Maitre->create();
-            $username = $this->buildUsername($this->request->data['Maitre']);
-            $data = array(
-                'username' => $username,
-                'password' => $this->request->data['Maitre']['telephone'],
-                'role' => 'external'
-            );
-            $this->User->save($data);
-            $this->request->data['Maitre']['user_id'] = $this->User->id;
-            if ($this->Maitre->save($this->request->data)) {
-                $this->Session->setFlash(__('Le maitre est créé'));
-                return $this->redirect(array('action' => 'index'));
+            if ($this->request->data['Game']['type'] == 'ia') {
+                return $this->redirect(array('controller' => 'pages', 'action' => 'display',
+                    CakeSession::read('OpenXum.game')));
+            } else {
+                $this->Game->create();
+                $this->request->data['Game']['user_id'] = AuthComponent::user('id');
+                if ($this->Game->save($this->request->data)) {
+                    return $this->redirect(array('action' => 'index'));
+                }
             }
-            $this->Session->setFlash(__('Impossible de créér le maitre'));
         }
-        $entreprises = $this->Maitre->Entreprise->find('list', array('fields' => array('id', 'nom')));
-        $this->set('entreprises', $entreprises);
-    }
-
-    public function delete($id)
-    {
-        if ($this->request->is('get')) {
-            throw new MethodNotAllowedException();
-        }
-        if ($this->Maitre->delete($id)) {
-            $this->Session->setFlash(__('Le maitre avec l\'identifiant %s a été supprimé', h($id)));
-            return $this->redirect(array('action' => 'index'));
-        }
-    }
-
-    public function edit($id = null)
-    {
-        if (!$id) {
-            throw new NotFoundException(__('Maitre inconnu'));
-        }
-        $maitre = $this->Maitre->findById($id);
-        if (!$maitre) {
-            throw new NotFoundException(__('Maitre inconnu'));
-        }
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $this->Maitre->id = $id;
-            if ($this->Maitre->save($this->request->data)) {
-                $this->Session->setFlash(__('Le maitre a été mis à jour'));
-                return $this->redirect(array('action' => 'index'));
-            }
-            $this->Session->setFlash(__('Le maitre n\'a pas pu être mis à jour'));
-        }
-        if (!$this->request->data) {
-            $this->request->data = $maitre;
-        }
-        $entreprises = $this->Maitre->Entreprise->find('list', array('fields' => array('id', 'nom')));
-        $this->set('entreprises', $entreprises);
     }
 
     public function index()
     {
-        $this->set('maitres', $this->Maitre->find('all'));
+        if (isset($this->params['named']['game'])) {
+            CakeSession::write('OpenXum.game', $this->params['named']['game']);
+        }
+        $games = $this->Game->find('all',
+            array('conditions' => array('Game.game' => CakeSession::read('OpenXum.game'),
+            'Game.user_id' => AuthComponent::user('id'))));
+        $this->set('games', $games);
     }
 
-    public function validation($id)
+    public function join()
     {
-        $validation = $this->Validation->find('first', array('conditions' => array('Validation.apprenti_id' => $id)));
-        if ($validation['Validation']['apprenti_todo'] && $validation['Validation']['tuteur_todo']) {
-            if ($this->Validation->delete($validation['Validation']['id'])) {
-                $this->Apprenti->recursive = -1;
-                $apprenti = $this->Apprenti->find('first', array('conditions' => array('Apprenti.id' => $id)));
-                $workflow_link = $this->WorkflowLink->find('first', array('conditions' => array('WorkflowLink.source_workflow_item_id' => $apprenti['Apprenti']['workflow_item_id'])));
-                if (!empty($workflow_link)) {
-                    $apprenti['Apprenti']['workflow_item_id'] = $workflow_link['WorkflowLink']['destination_workflow_item_id'];
-                    if ($this->Apprenti->save($apprenti)) {
-                        $this->Session->setFlash(__('La validation a été effectuée et le workflow a évolué'));
-                        return $this->redirect(array('controller' => 'apprentis', 'action' => 'index_tuteur'));
-                    } else {
-                        $this->Session->setFlash(__('La validation n\'a pas été effectuée'));
-                        return $this->redirect(array('controller' => 'apprentis', 'action' => 'index_tuteur'));
-                    }
-                } else {
-                    $this->Session->setFlash(__('La validation a été effectuée et le workflow est fini'));
-                    return $this->redirect(array('controller' => 'apprentis', 'action' => 'index_tuteur'));
-                }
-            } else {
-                $this->Session->setFlash(__('La validation n\'a pas été effectuée'));
-                return $this->redirect(array('controller' => 'apprentis', 'action' => 'index_tuteur'));
-            }
-        } else {
-            $validation['Validation']['maitre_todo'] = true;
-            if ($this->Validation->save($validation)) {
-                $this->Session->setFlash(__('La validation a été effectuée'));
-                return $this->redirect(array('controller' => 'apprentis', 'action' => 'index_maitre'));
-            } else {
-                $this->Session->setFlash(__('La validation n\'a pas été effectuée'));
-                return $this->redirect(array('controller' => 'apprentis', 'action' => 'index_maitre'));
-            }
-        }
     }
 
-    public function view($id = null)
+    public function delete($id = null)
     {
-        if (!$id) {
-            throw new NotFoundException(__('Maitre inconnu'));
+        if (!$this->request->is('post')) {
+            throw new MethodNotAllowedException();
         }
-        $maitre = $this->Maitre->findById($id);
-        if (!$maitre) {
-            throw new NotFoundException(__('Maitre inconnu'));
+        $this->Game->id = $id;
+        if ($this->Game->delete()) {
+            return $this->redirect(array('action' => 'index'));
         }
-        $this->set('maitre', $maitre);
+        return $this->redirect(array('action' => 'index'));
     }
 
-    private function buildUsername($maitre)
+    public function resume()
     {
-        $index = 1;
-        $username = substr($maitre['prenom'], 0, 1) . $maitre['nom'];
-        while (!empty($this->User->findByUsername($username))) {
-            $username = substr($maitre['prenom'], 0, 1) . $maitre['nom'] . '_' . $index;
-            $index = $index + 1;
-        }
-        return $username;
     }
 }
-
-?>

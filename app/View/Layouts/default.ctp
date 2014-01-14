@@ -52,22 +52,47 @@
             <ul>
                 <li>
                     <?php
-                    echo $this->Html->link(__('Home'), array('controller' => 'pages', 'action' => 'display', 'home'), array("data-icon" => "home"));
+                    echo $this->Html->link(__('Home'),
+                        array('controller' => 'pages', 'action' => 'display', 'home'),
+                        array("data-icon" => "home"));
                     ?>
                 </li>
-                <li>
-                    <?php
-                    echo $this->Html->link(__('Games'), array('controller' => 'pages', 'action' => 'display', 'games'), array("data-icon" => "grid"));
-                    ?>
-                </li>
+                <?php if (AuthComponent::user('id') != 0): ?>
+                    <?php if (AuthComponent::user('role') == 'admin'): ?>
+                        <li>
+                            <?php
+                            echo $this->Html->link(__('Admin'),
+                                array('controller' => 'users', 'index'), array("data-icon" => "grid"));
+                            ?>
+                        </li>
+                    <?php else: ?>
+                        <li>
+                            <?php
+                            if (CakeSession::read('OpenXum.game') == '') {
+                                echo $this->Html->link(__('Games'),
+                                    array('controller' => 'pages', 'action' => 'display', 'games'),
+                                    array("data-icon" => "grid"));
+                            } else {
+                                echo $this->Html->link(__('Games').' ['.CakeSession::read('OpenXum.game').']',
+                                    array('controller' => 'pages', 'action' => 'display', 'games'),
+                                    array("data-icon" => "grid"));
+                            }
+                            ?>
+                        </li>
+                    <?php endif ?>
+                <?php endif ?>
                 <li><a href="#" data-icon="bars">Ranking</a></li>
                 <li><a href="#" data-icon="info">Help</a></li>
                 <li>
                     <?php
                     if (AuthComponent::user('id') != 0) {
-                        echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'), array("data-icon" => "check",  "class" => "ui-btn-active")).' '.AuthComponent::user('username');
+                        echo $this->Html->link(__('Logout').' ['.AuthComponent::user('username').']',
+                                array('controller' => 'users', 'action' => 'logout'),
+                                array("data-icon" => "check",  "class" => "ui-btn-active"));
                     } else {
-                        echo $this->Html->link('Sign in', array('controller' => 'users', 'action' => 'login'), array("data-icon" => "check",  "class" => "ui-btn-active"));
+                        echo $this->Html->link('Sign in',
+                            array('controller' => 'users', 'action' => 'login'),
+                            array("data-icon" => "check",  "class" => "ui-btn-active"));
                     }
                     ?>
                 </li>

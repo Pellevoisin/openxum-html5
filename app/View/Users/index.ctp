@@ -1,4 +1,4 @@
-<h1>Utilisateurs</h1>
+<h1>Players</h1>
 
 <?php echo $this->Html->link($this->Html->image('user-add.png', array('alt' => 'add', 'height' => '24px')),
     array('controller' => 'users', 'action' => 'add'),
@@ -7,7 +7,7 @@
 <table>
     <tr>
         <th>Login</th>
-        <th>Rôle</th>
+        <th>Role</th>
         <th>Action</th>
     </tr>
 
@@ -30,7 +30,7 @@
             ?>
         </td>
         <td>
-            <?php echo $this->Html->link($this->Html->image('edit.png', array('alt' => 'edit', 'height' => '24px')),
+            <?php echo $this->Html->link($this->Html->image('user-edit.png', array('alt' => 'edit', 'height' => '24px')),
                 array('action' => 'edit', $user['User']['id']),
                 array('escape' => false)); ?>
             <?php echo $this->Form->postLink($this->Html->image('user-delete.png', array('alt' => 'delete', 'height' => '24px')),

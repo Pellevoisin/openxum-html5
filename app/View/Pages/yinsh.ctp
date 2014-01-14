@@ -63,7 +63,10 @@
 <div data-role="footer" class="ui-bar"
      style="position: absolute; bottom: 0; width: 100%; margin-left:auto; margin-right:auto; align:center; text-align:center;">
     <div data-role="controlgroup" data-type="horizontal">
-        <a href="#">New game</a>
+        <?php
+        echo $this->Html->link(__('New game'),
+            array('controller' => 'games', 'action' => 'index'), array('escape' => false));
+        ?>
         <a href="#">Rules</a>
     </div>
 </div>
