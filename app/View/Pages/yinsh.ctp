@@ -1,5 +1,4 @@
 <div data-role="content">
-    <?php echo $this->Session->flash(); ?>
 
     <?php
     echo $this->Html->script('yinsh/Yinsh');
