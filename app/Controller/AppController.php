@@ -57,6 +57,7 @@ class AppController extends Controller
 
     public function logout()
     {
+        CakeSession::delete('OpenXum.game');
         return $this->redirect($this->Auth->logout());
     }
 
