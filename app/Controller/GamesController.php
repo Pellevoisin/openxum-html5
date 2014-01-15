@@ -33,10 +33,6 @@ class GamesController extends AppController
         return true;
     }
 
-    public function choice()
-    {
-    }
-
     public function create()
     {
         if ($this->request->is('post')) {

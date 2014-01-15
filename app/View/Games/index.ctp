@@ -1,12 +1,6 @@
-<div data-role="content">
+<div class="container">
 
-<?php echo $this->Html->link($this->Html->image('user-add.png',
-        array('alt' => 'add', 'height' => '24px')),
-    array('controller' => 'games', 'action' => 'create',
-        'game' => CakeSession::read('OpenXum.game')),
-    array('escape' => false)); ?>
-
-    <table>
+    <table class='table'>
         <tr>
             <th>Name</th>
             <th>Color</th>
@@ -31,19 +25,22 @@
                 </td>
                 <td>
                     <?php
-                    echo $this->Form->postLink(__('release'),
+                    echo $this->Form->postLink('<i class="glyphicon glyphicon-trash"></i> '.__('release'),
                         array('action' => 'delete', $game['Game']['id']),
-                        array('escape' => false),
+                        array('class' => 'btn btn-danger btn-md active',
+                            'escape' => false),
                         __('Are you sure to delete game?'));
                     echo ' ';
                     if ($game['Game']['type'] == 'offline') {
-                        echo $this->Html->link(__('resume'),
+                        echo $this->Html->link('<i class="glyphicon glyphicon-refresh"></i> '.__('resume'),
                             array('controller' => 'games', 'action' => 'resume'),
-                            array('escape' => false));
+                            array('class' => 'btn btn-success btn-md active',
+                                'escape' => false));
                     } else {
-                        echo $this->Html->link(__('join'),
+                        echo $this->Html->link('<i class="glyphicon glyphicon-share-alt"></i> '.__('join'),
                             array('controller' => 'games', 'action' => 'join'),
-                            array('escape' => false));
+                            array('class' => 'btn btn-success btn-md active',
+                                'escape' => false));
                     }
                     ?>
                 </td>
@@ -53,11 +50,10 @@
 
     </table>
 
-</div>
+    <?php echo $this->Html->link('<i class="glyphicon glyphicon-plus"></i> '.__('Create'),
+        array('controller' => 'games', 'action' => 'create',
+            'game' => CakeSession::read('OpenXum.game')),
+        array('class' => 'btn btn-primary btn-md active',
+            'escape' => false)); ?>
 
-<div data-role="footer" class="ui-bar"
-     style="position: absolute; bottom: 0; width: 100%; margin-left:auto; margin-right:auto; align:center; text-align:center;">
-    <div data-role="controlgroup" data-type="horizontal">
-        <a href="#">About</a>
-    </div>
 </div>

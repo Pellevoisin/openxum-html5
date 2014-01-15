@@ -26,80 +26,88 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <?php echo $this->Html->charset(); ?>
+    <?php
+    echo '<meta charset="utf-8">';
+    echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">';
+    echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+    echo $this->Html->meta('icon');
+    ?>
+
     <title>
         <?php __('OpenXum'); ?>
         <?php echo $title_for_layout; ?>
     </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <?php
-    echo $this->Html->meta('icon');
 
     echo $this->Html->css('openxum');
-    echo $this->Html->css('jquery.mobile.min');
-    echo $this->Html->css('jquery.mobile.theme.min');
+    echo $this->Html->css('bootstrap.min');
+    echo $this->Html->css('bootstrap-theme.min');
 
     echo $this->Html->script('jquery.min');
-    echo $this->Html->script('jquery.mobile.min');
+    echo $this->Html->script('bootstrap.min');
 
     echo $scripts_for_layout;
     ?>
 </head>
 <body>
-<div data-role="page">
-    <div data-role="header">
-        <div data-role="navbar" data-iconpos="right" data-grid="d">
-            <ul>
-                <li>
-                    <?php
-                    echo $this->Html->link(__('Home'),
-                        array('controller' => 'pages', 'action' => 'display', 'home'),
-                        array("data-icon" => "home"));
-                    ?>
-                </li>
-                <?php if (AuthComponent::user('id') != 0): ?>
-                    <?php if (AuthComponent::user('role') == 'admin'): ?>
-                        <li>
-                            <?php
-                            echo $this->Html->link(__('Admin'),
-                                array('controller' => 'users', 'index'), array("data-icon" => "grid"));
-                            ?>
-                        </li>
-                    <?php else: ?>
-                        <li>
-                            <?php
-                            if (CakeSession::read('OpenXum.game') == '') {
-                                echo $this->Html->link(__('Games'),
-                                    array('controller' => 'pages', 'action' => 'display', 'games'),
-                                    array("data-icon" => "grid"));
-                            } else {
-                                echo $this->Html->link(__('Games').' ['.CakeSession::read('OpenXum.game').']',
-                                    array('controller' => 'pages', 'action' => 'display', 'games'),
-                                    array("data-icon" => "grid"));
-                            }
-                            ?>
-                        </li>
+<div style="height: 60px;">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <?php
+                echo $this->Html->link(__('Home'), array('controller' => 'pages', 'action' => 'display', 'home'),
+                    array("class" => "navbar-brand"));
+                ?>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <?php if (AuthComponent::user('id') != 0): ?>
+                        <?php if (AuthComponent::user('role') == 'admin'): ?>
+                            <li>
+                                <?php
+                                echo $this->Html->link(__('Admin'),
+                                    array('controller' => 'users', 'index'));
+                                ?>
+                            </li>
+                        <?php else: ?>
+                            <li>
+                                <?php
+                                if (CakeSession::read('OpenXum.game') == '') {
+                                    echo $this->Html->link(__('Games'),
+                                        array('controller' => 'pages', 'action' => 'display', 'games'));
+                                } else {
+                                    echo $this->Html->link(__('Games').' ['.CakeSession::read('OpenXum.game').']',
+                                        array('controller' => 'pages', 'action' => 'display', 'games'));
+                                }
+                                ?>
+                            </li>
+                        <?php endif ?>
                     <?php endif ?>
-                <?php endif ?>
-                <li><a href="#" data-icon="bars">Ranking</a></li>
-                <li><a href="#" data-icon="info">Help</a></li>
-                <li>
-                    <?php
-                    if (AuthComponent::user('id') != 0) {
-                        echo $this->Html->link(__('Logout').' ['.AuthComponent::user('username').']',
-                                array('controller' => 'users', 'action' => 'logout'),
-                                array("data-icon" => "check",  "class" => "ui-btn-active"));
-                    } else {
-                        echo $this->Html->link('Sign in',
-                            array('controller' => 'users', 'action' => 'login'),
-                            array("data-icon" => "check",  "class" => "ui-btn-active"));
-                    }
-                    ?>
-                </li>
-            </ul>
+                    <li><a href="#">Ranking</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <?php
+                        if (AuthComponent::user('id') != 0) {
+                            echo $this->Html->link(__('Logout').' ['.AuthComponent::user('username').']',
+                                array('controller' => 'users', 'action' => 'logout'));
+                        } else {
+                            echo $this->Html->link('Sign in',
+                                array('controller' => 'users', 'action' => 'login'));
+                        }
+                        ?>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
+</div>
+
+<div id="#content">
     <?php echo $content_for_layout; ?>
 </div>
+
 </body>
 </html>

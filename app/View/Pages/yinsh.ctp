@@ -34,38 +34,27 @@
         });
    </script>
 
-    <div data-role="popup" id="popupWinner"></div>
+<!--    <div data-role="popup" id="popupWinner"></div> -->
 
-    <section class="ui-grid-a" style="height: 500px">
-        <div class="ui-block-a" style="width: 25%; height: 100%">
+    <div class="row">
+        <div class="col-md-3 visible-md visible-lg">
             <table style="width: 100%; height: 100%; table-layout: fixed; padding: 10px">
                 <tr style="height: 50px">
                     <td>
                         <span id="markerNumber"></span>
                     </td>
                 </tr>
-                <tr style="vertical-align: top">
+                <tr style="vertical-align: top;">
                     <td>
                         <span id="turnList" style="display:block; overflow: auto"></span>
                     </td>
                 </tr>
             </table>
         </div>
-        <div class="ui-block-b" style="padding: 10px; width: 70%; height: 100%" id="boardDiv">
+        <div class="col-md-9" id="boardDiv">
             <canvas id="board"
-                    style="padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block; border-radius: 15px; -moz-border-radius: 15px; box-shadow: 8px 8px 2px #aaa; ">
+                    style="width: 500px; height: 500px; padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block; border-radius: 15px; -moz-border-radius: 15px; box-shadow: 8px 8px 2px #aaa; ">
             </canvas>
         </div>
-    </section>
-</div>
-
-<div data-role="footer" class="ui-bar"
-     style="position: absolute; bottom: 0; width: 100%; margin-left:auto; margin-right:auto; align:center; text-align:center;">
-    <div data-role="controlgroup" data-type="horizontal">
-        <?php
-        echo $this->Html->link(__('New game'),
-            array('controller' => 'games', 'action' => 'index'), array('escape' => false));
-        ?>
-        <a href="#">Rules</a>
     </div>
 </div>
