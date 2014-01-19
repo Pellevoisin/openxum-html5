@@ -1,14 +1,24 @@
-<h1>Players</h1>
+<?php
+echo $this->Html->script('AdminClient');
+?>
+
+<script language="javascript">
+    var client = new AdminClient();
+    client.start();
+</script>
+
+<h2>Players</h2>
 
 <?php echo $this->Html->link($this->Html->image('user-add.png', array('alt' => 'add', 'height' => '24px')),
     array('controller' => 'users', 'action' => 'add'),
     array('escape' => false)); ?>
 
-<table>
+<table class="table">
     <tr>
         <th>Login</th>
         <th>Role</th>
-        <th>Action</th>
+        <th>Connected</th>
+        <th>Actions</th>
     </tr>
 
     <?php foreach ($users as $user): ?>
@@ -29,6 +39,7 @@
             }
             ?>
         </td>
+        <?php echo '<td id="td_user_' . $user['User']['id'] . '"></td>'; ?>
         <td>
             <?php echo $this->Html->link($this->Html->image('user-edit.png', array('alt' => 'edit', 'height' => '24px')),
                 array('action' => 'edit', $user['User']['id']),

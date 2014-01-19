@@ -25,7 +25,7 @@ var wsServer = new webSocketServer({
     httpServer: server
 });
 
-var clients = [ ];
+var clients = { };
 var current_games = [ ];
 
 wsServer.on('request', function (request) {
@@ -37,6 +37,23 @@ wsServer.on('request', function (request) {
         if (msg.type === 'connect') {
             console.log('connect ' + msg.user_id);
             clients[msg.user_id] = connection;
+            if (msg.user_id == 1) {
+                var user_ids =  [ ];
+                var keys = Object.keys(clients);
+
+                for (var id in clients) {
+                    user_ids.push(id);
+                }
+
+                console.log('connected: ' + user_ids);
+
+                var response = {
+                    type: 'connected',
+                    user_ids: user_ids
+                };
+
+                clients[1].send(JSON.stringify(response));
+            }
         } else if (msg.type === 'join') {
             database_connection.query("SELECT owner_id, users.username FROM openxum.games, openxum.users WHERE games.id=" +
                 msg.game_id + " AND users.id="+msg.opponent_id+";",
