@@ -7,11 +7,9 @@
 
     echo '<div class="form-group">';
     echo $this->Form->input('name',
-        array('label' => array('text' => __('Game name'),
-            'class' => 'control-label'),
+        array('label' => array('text' => __('Game name'), 'class' => 'control-label'),
             'div' => false, 'placeholder' => __('Game name'),
-            'class' => 'form-control',
-            'required'));
+            'class' => 'form-control', 'required'));
     echo '</div>';
 
     echo '<div class="form-group">';
