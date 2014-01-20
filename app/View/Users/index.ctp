@@ -17,7 +17,7 @@ echo $this->Html->script('AdminClient');
     <tr>
         <th>Login</th>
         <th>Role</th>
-        <th>Connected</th>
+        <th>Status</th>
         <th>Actions</th>
     </tr>
 

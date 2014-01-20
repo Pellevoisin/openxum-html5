@@ -31,7 +31,41 @@ AdminClient = function (u) {
 
                 if (msg.type == 'connected') {
                     for (var i = 0; i < msg.user_ids.length; i++) {
+                        var found = false;
+                        var j = 0;
+
                         $('td#td_user_' + msg.user_ids[i]).html('connected');
+                        while (j < clients.length && !found) {
+                            if (clients[j] == msg.user_ids[i]) {
+                                found = true;
+                            } else {
+                                j++;
+                            }
+                        }
+                        if (!found) {
+                            clients.push(msg.user_ids[i]);
+                        }
+                    }
+
+                    var j = 0;
+
+                    while (j < clients.length) {
+                        var found = false;
+                        var i = 0;
+
+                        while (i < msg.user_ids.length && !found) {
+                            if (clients[j] == msg.user_ids[i]) {
+                                found = true;
+                            } else {
+                                i++;
+                            }
+                        }
+                        if (!found) {
+                            $('td#td_user_' + clients[j]).html('');
+                            clients.splice(j, 1);
+                        } else {
+                            j++;
+                        }
                     }
                 }
             };
@@ -56,10 +90,12 @@ AdminClient = function (u) {
 
     var init = function (u) {
         uid = u;
+        clients = [ ];
     };
 
     var connection;
     var uid;
+    var clients;
 
     init(u);
-}
+};
