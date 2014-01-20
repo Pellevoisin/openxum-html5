@@ -6,10 +6,10 @@ var webSocketServer = require('websocket').server;
 var http = require('http');
 var mysql = require('mysql');
 
-var OpenxumServer = function(p) {
+var OpenxumServer = function (p) {
 
 // private methods
-    var onConnect = function(connection, msg) {
+    var onConnect = function (connection, msg) {
         console.log('connect ' + msg.user_id);
 
         clients[msg.user_id] = connection;
@@ -21,7 +21,7 @@ var OpenxumServer = function(p) {
         var found = false;
 
         for (index in clients) {
-            if (clients[index].socket._peername.port == port) {
+            if (clients[index] != undefined && clients[index].socket._peername.port == port) {
                 found = true;
             }
         }
@@ -29,16 +29,17 @@ var OpenxumServer = function(p) {
             console.log('disconnect ' + index);
 
             clients[index] = undefined;
+            currentGames[index] = undefined;
             sendConnectedClients();
         }
     };
 
     var onConfirm = function (msg) {
         databaseConnection.query("UPDATE openxum.games SET status='run', opponent_id=" + msg.opponent_id +
-            " WHERE games.id=" + msg.game_id + ";", function(err, rows, fields) {
+            " WHERE games.id=" + msg.game_id + ";", function (err, rows, fields) {
             if (err) throw err;
             databaseConnection.query("SELECT color FROM openxum.games WHERE games.id=" + msg.game_id + ";",
-                function(err, rows, fields) {
+                function (err, rows, fields) {
                     if (err) throw err;
                     var c_opponent = clients[msg.opponent_id];
                     var c_owner = clients[msg.owner_id];
@@ -61,8 +62,8 @@ var OpenxumServer = function(p) {
 
     var onJoin = function (msg) {
         databaseConnection.query("SELECT owner_id, users.username FROM openxum.games, openxum.users WHERE games.id=" +
-            msg.game_id + " AND users.id="+msg.opponent_id+";",
-            function(err, rows, fields) {
+            msg.game_id + " AND users.id=" + msg.opponent_id + ";",
+            function (err, rows, fields) {
                 if (err) throw err;
                 var owner_id = rows[0].owner_id;
                 var c_opponent = clients[msg.opponent_id];
@@ -84,7 +85,7 @@ var OpenxumServer = function(p) {
         );
     };
 
-    var onMessage = function(connection, message) {
+    var onMessage = function (connection, message) {
         var msg = JSON.parse(message.utf8Data);
 
         if (msg.type === 'connect') {
@@ -100,8 +101,9 @@ var OpenxumServer = function(p) {
         }
     };
 
-    var onPlay = function(connection, msg) {
+    var onPlay = function (connection, msg) {
         console.log('play: ' + msg.game_id + ' by ' + msg.user_id + ' against ' + msg.opponent_id);
+
         clients[msg.user_id] = connection;
         currentGames[msg.user_id] = {
             game_id: msg.game_id,
@@ -109,12 +111,12 @@ var OpenxumServer = function(p) {
         };
     };
 
-    var onTurn = function(msg) {
+    var onTurn = function (msg) {
         var c_opponent = clients[currentGames[msg.user_id].opponent_id];
         var response;
 
         if (msg.move == 'put_ring' || msg.move == 'put_marker' || msg.move == 'remove_ring' ||
-            msg.move == 'remove_row')  {
+            msg.move == 'remove_row') {
             console.log('turn: ' + msg.move + ' ' + msg.coordinates.letter + msg.coordinates.number
                 + ' by ' + msg.color + ' / ' + msg.user_id);
 
@@ -149,7 +151,7 @@ var OpenxumServer = function(p) {
         }
     };
 
-    var processRequest = function(request) {
+    var processRequest = function (request) {
         var connection = request.accept(null, request.origin);
 
         connection.on('message', function (message) {
@@ -161,27 +163,30 @@ var OpenxumServer = function(p) {
         });
     };
 
-    var sendConnectedClients = function() {
+    var sendConnectedClients = function () {
         if (clients[1] != undefined) {
-            var user_ids =  [ ];
+            var users = [ ];
 
             for (var id in clients) {
                 if (clients[id] != undefined) {
-                    user_ids.push(id);
+                    if (currentGames[id] != undefined) {
+                        users.push({ id: id, status: 'play' });
+                    } else {
+                        users.push({ id: id, status: 'wait' });
+                    }
                 }
             }
 
             var response = {
                 type: 'connected',
-                user_ids: user_ids
+                users: users
             };
 
             clients[1].send(JSON.stringify(response));
         }
-    }
+    };
 
-    var init = function(p)
-    {
+    var init = function (p) {
         port = p;
         databaseConnection = mysql.createConnection({
             host: 'localhost',

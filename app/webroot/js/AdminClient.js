@@ -1,5 +1,6 @@
 AdminClient = function (u) {
 
+// public methods
     this.start = function () {
 
         window.onbeforeunload = function () {
@@ -30,43 +31,7 @@ AdminClient = function (u) {
                 var msg = JSON.parse(message.data);
 
                 if (msg.type == 'connected') {
-                    for (var i = 0; i < msg.user_ids.length; i++) {
-                        var found = false;
-                        var j = 0;
-
-                        $('td#td_user_' + msg.user_ids[i]).html('connected');
-                        while (j < clients.length && !found) {
-                            if (clients[j] == msg.user_ids[i]) {
-                                found = true;
-                            } else {
-                                j++;
-                            }
-                        }
-                        if (!found) {
-                            clients.push(msg.user_ids[i]);
-                        }
-                    }
-
-                    var j = 0;
-
-                    while (j < clients.length) {
-                        var found = false;
-                        var i = 0;
-
-                        while (i < msg.user_ids.length && !found) {
-                            if (clients[j] == msg.user_ids[i]) {
-                                found = true;
-                            } else {
-                                i++;
-                            }
-                        }
-                        if (!found) {
-                            $('td#td_user_' + clients[j]).html('');
-                            clients.splice(j, 1);
-                        } else {
-                            j++;
-                        }
-                    }
+                    onConnected(msg);
                 }
             };
 
@@ -88,11 +53,53 @@ AdminClient = function (u) {
         });
     };
 
+// private methods
+    var onConnected = function (msg) {
+        for (var i = 0; i < msg.users.length; i++) {
+            var found = false;
+            var j = 0;
+
+            $('td#td_user_' + msg.users[i].id).html(msg.users[i].status);
+            while (j < clients.length && !found) {
+                if (clients[j] == msg.users[i].id) {
+                    found = true;
+                } else {
+                    j++;
+                }
+            }
+            if (!found) {
+                clients.push(msg.users[i].id);
+            }
+        }
+
+        var j = 0;
+
+        while (j < clients.length) {
+            var found = false;
+            var i = 0;
+
+            while (i < msg.users.length && !found) {
+                if (clients[j] == msg.users[i].id) {
+                    found = true;
+                } else {
+                    i++;
+                }
+            }
+            if (!found) {
+                $('td#td_user_' + clients[j]).html('no connected');
+                clients.splice(j, 1);
+            } else {
+                j++;
+            }
+        }
+    };
+
     var init = function (u) {
         uid = u;
         clients = [ ];
     };
 
+// private attributes
     var connection;
     var uid;
     var clients;

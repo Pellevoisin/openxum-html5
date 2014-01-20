@@ -39,7 +39,7 @@ echo $this->Html->script('AdminClient');
             }
             ?>
         </td>
-        <?php echo '<td id="td_user_' . $user['User']['id'] . '"></td>'; ?>
+        <?php echo '<td id="td_user_' . $user['User']['id'] . '">no connected</td>'; ?>
         <td>
             <?php echo $this->Html->link($this->Html->image('user-edit.png', array('alt' => 'edit', 'height' => '24px')),
                 array('action' => 'edit', $user['User']['id']),
