@@ -29,7 +29,13 @@
                     echo '</div></div>';
                     echo $this->Form->submit(__('Sign in'),
                         array('class' => 'btn btn-lg btn-success btn-block'));
-                    echo '</fieldset>'
+                    echo '</fieldset>';
+
+                    echo '<br>';
+
+                    echo $this->Html->link(__('Sign up'),
+                        array('controller' => 'users', 'action' => 'signup'),
+                        array('class' => 'btn btn-lg btn-primary btn-block', 'escape' => false));
                     ?>
                 </div>
             </div>

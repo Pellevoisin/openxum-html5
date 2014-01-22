@@ -37,14 +37,15 @@ class AppController extends Controller
 
     public function beforeFilter()
     {
-        $this->Auth->allow('login', 'logout');
+        $this->Auth->allow('signin', 'signup', 'logout');
     }
 
-    public function isAuthorized($user) {
-        return false;
+    public function isAuthorized($user)
+    {
+        return true;
     }
 
-    public function login()
+/*    public function login()
     {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
@@ -53,7 +54,7 @@ class AppController extends Controller
                 $this->Session->setFlash(__('Login ou mot de passe invalide, réessayer'));
             }
         }
-    }
+    } */
 
     public function logout()
     {

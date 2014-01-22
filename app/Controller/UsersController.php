@@ -28,10 +28,9 @@ class UsersController extends AppController
         parent::beforeFilter();
     }
 
-    public function isAuthorized($user) {
-//        if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-//        } else { return false; }
+    public function isAuthorized($user)
+    {
+        return true;
     }
 
     public function index()
@@ -53,7 +52,7 @@ class UsersController extends AppController
     {
         if ($this->request->is('post')) {
             $this->User->create();
-            $this->User->ban = false;
+            $this->request->data['User']['valid'] = true;
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('L\'utilisateur a été sauvegardé'));
                 return $this->redirect(array('action' => 'index'));
@@ -99,17 +98,47 @@ class UsersController extends AppController
         return $this->redirect(array('action' => 'index'));
     }
 
-    public function login()
+    public function signin()
     {
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
-                if (AuthComponent::user('role') === 'player') {
+                if (AuthComponent::user('valid')) {
                     return $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+                } else {
+                    $this->Auth->logout();
                 }
-                return $this->redirect($this->Auth->redirectUrl());
-            } else {
-                $this->Session->setFlash(__('Login ou mot de passe invalide, réessayer'));
+            }
+            return $this->redirect(array('controller' => 'users', 'action' => 'signin'));
+        }
+    }
+
+    public function signup()
+    {
+        if ($this->request->is('post')) {
+            $this->User->create();
+            $this->request->data['User']['valid'] = false;
+            $this->request->data['User']['role'] = 'player';
+            if ($this->User->save($this->request->data)) {
+                return $this->redirect(array('controller' => 'users', 'action' => 'signin'));
             }
         }
+    }
+
+    public function invalid($id = null)
+    {
+        $this->User->id = $id;
+        $this->request->data = $this->User->read(null, $id);
+        $this->request->data['User']['valid'] = false;
+        $this->User->save($this->request->data);
+        return $this->redirect(array('action' => 'index'));
+    }
+
+    public function valid($id = null)
+    {
+        $this->User->id = $id;
+        $this->request->data = $this->User->read(null, $id);
+        $this->request->data['User']['valid'] = true;
+        $this->User->save($this->request->data);
+        return $this->redirect(array('action' => 'index'));
     }
 }

@@ -54,12 +54,34 @@
                                     }
                                     ?>
                                 </td>
-                                <?php echo '<td id="td_user_' . $user['User']['id'] . '">no connected</td>'; ?>
+                                <?php
+                                echo '<td id="td_user_' . $user['User']['id'] . '">';
+                                if ($user['User']['valid']) {
+                                    echo 'no connected';
+                                } else {
+                                    echo 'invalid';
+                                }
+                                echo '</td>';
+                                ?>
                                 <td>
-                                    <?php echo $this->Html->link('<i class="glyphicon glyphicon-edit"></i> ' . __('Edit'),
-                                        array('controller' => 'users', 'action' => 'edit'),
-                                        array('class' => 'btn btn-warning btn-md active', 'escape' => false)); ?>
-                                    <?php echo $this->Form->postLink('<i class="glyphicon glyphicon-remove"></i> ' . __('Remove'),
+                                    <?php
+                                    if ($user['User']['role'] !== 'admin') {
+                                        if ($user['User']['valid']) {
+                                            echo $this->Html->link('<i class="glyphicon glyphicon-check"></i> ' . __('Invalid'),
+                                                array('controller' => 'users', 'action' => 'invalid', $user['User']['id']),
+                                                array('class' => 'btn btn-primary btn-md active', 'escape' => false));
+                                        } else {
+                                            echo $this->Html->link('<i class="glyphicon glyphicon-check"></i> ' . __('Valid'),
+                                                array('controller' => 'users', 'action' => 'valid', $user['User']['id']),
+                                                array('class' => 'btn btn-primary btn-md active', 'escape' => false));
+                                        }
+                                        echo ' ';
+                                    }
+                                    echo $this->Html->link('<i class="glyphicon glyphicon-edit"></i> ' . __('Edit'),
+                                        array('controller' => 'users', 'action' => 'edit', $user['User']['id']),
+                                        array('class' => 'btn btn-warning btn-md active', 'escape' => false));
+                                    echo ' ';
+                                    echo $this->Form->postLink('<i class="glyphicon glyphicon-remove"></i> ' . __('Remove'),
                                         array('controller' => 'users', 'action' => 'delete', $user['User']['id']),
                                         array('class' => 'btn btn-danger btn-md active', 'escape' => false),
                                         __('Are you sure to remove this user?'));

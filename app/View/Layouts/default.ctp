@@ -101,7 +101,7 @@
                             array('controller' => 'users', 'action' => 'logout'));
                     } else {
                         echo $this->Html->link('Sign in',
-                            array('controller' => 'users', 'action' => 'login'));
+                            array('controller' => 'users', 'action' => 'signin'));
                     }
                     ?>
                 </li>
