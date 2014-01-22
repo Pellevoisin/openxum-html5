@@ -38,7 +38,7 @@ class GamesController extends AppController
         if ($this->request->is('post')) {
             if ($this->request->data['Game']['type'] == 'ia') {
                 return $this->redirect(array('controller' => 'games', 'action' => 'play_'
-                    . CakeSession::read('OpenXum.game')));
+                    . CakeSession::read('OpenXum.game'), 'color' => $this->request->data['Game']['color']));
             } else {
                 $this->Game->create();
                 $this->request->data['Game']['owner_id'] = AuthComponent::user('id');

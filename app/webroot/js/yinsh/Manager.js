@@ -64,11 +64,11 @@ Yinsh.Manager = function (e, gui_player, other_player, s) {
         }
 
         if (engine.is_finished()) {
-            var popup = document.getElementById("popupWinner");
+            var popup = document.getElementById("winnerModalText");
 
-            popup.innerHTML = "<p>The game is finished. The winner is " +
-                (engine.winner_is() == Yinsh.Color.BLACK ? "black" : "white") + "</p>";
-            $("#popupWinner").popup("open");
+            popup.innerHTML = "<h4>The winner is " +
+                (engine.winner_is() == Yinsh.Color.BLACK ? "black" : "white") + "!</h4>";
+            $("#winnerModal").modal("show");
         }
 
     };

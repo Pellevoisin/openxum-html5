@@ -1,4 +1,34 @@
-<div data-role="content">
+<div class="container">
+
+    <script>
+        $(document).ready(function() {
+            $('#winnerModal .new-game-button').click(function() {
+                $('#winnerModal').modal('hide');
+                window.location.href = '/openxum-html5/index.php/games/index';
+            });
+        });
+    </script>
+
+    <div class="modal fade" id="winnerModal" tabindex="-1" role="dialog" aria-labelledby="winnerModelLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="winnerModalText" class="modal-body"></div>
+                <div class="modal-footer">
+                    <div class="btn-group">
+                        <?php
+                        echo $this->Html->Link(__('New game'), '#',
+                            array('class' => 'btn btn-primary new-game-button', 'escape' => false));
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
 
     <?php
     echo $this->Html->script('yinsh/Yinsh');
@@ -22,9 +52,14 @@
             var gui = new Yinsh.GuiPlayer(<?php echo ($color == 'black' ? 0 : 1); ?>, engine);
             var other;
 
-            if ( <?php echo $game_id; ?> === -1) {
+            if (<?php echo $game_id; ?> ===
+            -1
+            )
+            {
                 other = new Yinsh.RandomPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
-            } else {
+            }
+            else
+            {
                 other = new Yinsh.RemotePlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine, <?php echo $owner_id; ?>,
                     <?php echo $opponent_id; ?>, <?php echo $game_id; ?>);
             }
@@ -41,15 +76,16 @@
             gui.set_canvas(canvas);
             gui.set_manager(manager);
 
-            if ( <?php echo $game_id; ?> !== -1) {
+            if (<?php echo $game_id; ?> !==
+            -1
+            )
+            {
                 other.set_manager(manager);
             }
         });
     </script>
 
-<!--    <div data-role="popup" id="popupWinner"></div> -->
-
-<!--    <?php echo 'play '.$game_id.' with '.$owner_id.' against '.$opponent_id.' with '.$color ?> -->
+    <!--    <?php echo 'play '.$game_id.' with '.$owner_id.' against '.$opponent_id.' with '.$color ?> -->
 
     <div class="row">
         <div class="col-md-3 visible-md visible-lg">
