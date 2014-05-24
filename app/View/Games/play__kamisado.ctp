@@ -52,7 +52,7 @@
                 other = new Kamisado.RandomPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
             }
 
-            var manager = new Kamisado.Manager(engine, gui, other, new Kamisado.Status());
+            var manager = new Kamisado.Manager(engine, gui, other);
 
             if (canvas_div.clientHeight < canvas_div.clientWidth) {
                 canvas.height = canvas_div.clientHeight * 0.95;

@@ -1,7 +1,4 @@
-Kamisado.Status = function () {
-};
-
-Kamisado.Manager = function (e, gui_player, other_player, s) {
+Kamisado.Manager = function (e, gui_player, other_player) {
 
 // public methods
     this.play = function () {
@@ -41,5 +38,4 @@ Kamisado.Manager = function (e, gui_player, other_player, s) {
     var engine = e;
     var gui = gui_player;
     var other = other_player;
-    var status = s;
 };
