@@ -87,6 +87,30 @@ class GamesController extends AppController
         return $this->redirect(array('action' => 'index'));
     }
 
+    public function play_Kamisado()
+    {
+        if (array_key_exists('game_id', $this->params['named'])) {
+            $this->set('game_id', $this->params['named']['game_id']);
+        } else {
+            $this->set('game_id', -1);
+        }
+        if (array_key_exists('owner_id', $this->params['named'])) {
+            $this->set('owner_id', $this->params['named']['owner_id']);
+        } else {
+            $this->set('owner_id', -1);
+        }
+        if (array_key_exists('opponent_id', $this->params['named'])) {
+            $this->set('opponent_id', $this->params['named']['opponent_id']);
+        } else {
+            $this->set('opponent_id', -1);
+        }
+        if (array_key_exists('color', $this->params['named'])) {
+            $this->set('color', $this->params['named']['color']);
+        } else {
+            $this->set('opponent_id', -1);
+        }
+    }
+
     public function play_Yinsh()
     {
         if (array_key_exists('game_id', $this->params['named'])) {

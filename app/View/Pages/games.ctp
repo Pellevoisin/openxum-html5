@@ -14,9 +14,10 @@
     makeGame($this, 'dvonn', 'Dvonn');
     makeGame($this, 'invers', 'Invers');
     makeGame($this, 'gipf', 'Gipf');
-    makeGame($this, 'tzaar', 'Tzaar');
+    makeGame($this, 'kamisado', 'Kamisado');
     echo '</div>';
     echo '<div class="row" style="padding: 10px">';
+    makeGame($this, 'tzaar', 'Tzaar');
     makeGame($this, 'yinsh', 'Yinsh');
     makeGame($this, 'zertz', 'Zertz');
     echo '</div>';
