@@ -1,6 +1,10 @@
 Yinsh.RandomPlayer = function (color, engine) {
 
 // public methods
+    this.color = function() {
+        return mycolor;
+    };
+
     this.is_remote =function () {
         return false;
     };

@@ -52,10 +52,7 @@
             var gui = new Yinsh.GuiPlayer(<?php echo ($color == 'black' ? 0 : 1); ?>, engine);
             var other;
 
-            if (<?php echo $game_id; ?> ===
-            -1
-            )
-            {
+            if (<?php echo $game_id; ?> === -1) {
                 other = new Yinsh.RandomPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
             }
             else
@@ -76,11 +73,11 @@
             gui.set_canvas(canvas);
             gui.set_manager(manager);
 
-            if (<?php echo $game_id; ?> !==
-            -1
-            )
-            {
+            if (<?php echo $game_id; ?> !== -1) {
                 other.set_manager(manager);
+            }
+            if (engine.current_color() == other.color()) {
+                manager.play_other();
             }
         });
     </script>
@@ -104,7 +101,7 @@
         </div>
         <div class="col-md-9" id="boardDiv">
             <canvas id="board"
-                    style="width: 500px; height: 500px; padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block; border-radius: 15px; -moz-border-radius: 15px; box-shadow: 8px 8px 2px #aaa; ">
+                    style="width: 600px; height: 600px; padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block; border-radius: 15px; -moz-border-radius: 15px; box-shadow: 8px 8px 2px #aaa; ">
             </canvas>
         </div>
     </div>

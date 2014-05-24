@@ -50,27 +50,13 @@ Yinsh.Manager = function (e, gui_player, other_player, s) {
             }
         }
         gui.draw();
+        update_status();
+        finish();
         if (engine.current_color() != gui.color()) {
             if (!other.is_remote()) {
                 this.play_other();
             }
         }
-        status.markerNumber.innerHTML = engine.available_marker_number();
-        status.turnList.innerHTML = "";
-
-        var turn_list = engine.turn_list();
-        for (var i = 0; i < turn_list.length; ++i) {
-            status.turnList.innerHTML += turn_list[i] + "<br />";
-        }
-
-        if (engine.is_finished()) {
-            var popup = document.getElementById("winnerModalText");
-
-            popup.innerHTML = "<h4>The winner is " +
-                (engine.winner_is() == Yinsh.Color.BLACK ? "black" : "white") + "!</h4>";
-            $("#winnerModal").modal("show");
-        }
-
     };
 
     this.play_other = function () {
@@ -121,9 +107,32 @@ Yinsh.Manager = function (e, gui_player, other_player, s) {
             other.remove_ring();
         }
         gui.draw();
+        update_status();
+        finish();
     };
 
 // private methods
+    var finish = function () {
+        if (engine.is_finished()) {
+            var popup = document.getElementById("winnerModalText");
+
+            popup.innerHTML = "<h4>The winner is " +
+                (engine.winner_is() == Yinsh.Color.BLACK ? "black" : "white") + "!</h4>";
+            $("#winnerModal").modal("show");
+        }
+    };
+
+    var update_status = function () {
+        status.markerNumber.innerHTML = engine.available_marker_number();
+        status.turnList.innerHTML = "";
+
+        var turn_list = engine.turn_list();
+        for (var i = 0; i < turn_list.length; ++i) {
+            status.turnList.innerHTML += turn_list[i] + "<br />";
+        }
+    };
+
+// private attributes
     var engine = e;
     var gui = gui_player;
     var other = other_player;
