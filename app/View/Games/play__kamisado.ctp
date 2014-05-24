@@ -67,6 +67,9 @@
             if (<?php echo $game_id; ?> != -1) {
                 other.set_manager(manager);
             }
+            if (engine.current_color() == other.color()) {
+                manager.play_other();
+            }
         });
     </script>
 

@@ -6,7 +6,7 @@ Kamisado.Engine = function (type, color) {
     };
 
     this.find_playable_tower = function(color) {
-        var playable_tower;
+        var playable_tower=  undefined;
 
         if (play_color) {
             var list = get_towers(color);
