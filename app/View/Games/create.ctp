@@ -11,6 +11,23 @@
                     <?php echo $this->Form->create('Game', array('role' => 'form')); ?>
                     <fieldset>
                         <?php
+
+                        if (CakeSession::read('OpenXum.game') == 'Yinsh') {
+                            $colors = array('black' => __('Black'), 'white' => __('White'));
+                            $default_color = 'black';
+                            $modes = array('regular' => __('Regular'), 'blitz' => __('Blitz'));
+                            $default_mode = 'regular';
+                        } else if (CakeSession::read('OpenXum.game') == 'Kamisado') {
+                            $colors = array('black' => __('Black'), 'white' => __('White'));
+                            $default_color = 'black';
+                            $modes = array('simple' => __('Simple'), 'standard' => __('Standard'),
+                                'long' => __('Long'), 'marathon' => __('Marathon'));
+                            $default_mode = 'simple';
+                        } else {
+                            $colors = array();
+                            $modes = array();
+                        }
+
                         echo $this->Form->input('game',
                             array('type' => 'hidden', 'value' => CakeSession::read('OpenXum.game')));
 
@@ -22,24 +39,27 @@
                                 'class' => 'form-control', 'required'));
                         echo '</div></div>';
 
-                        echo '<div class="form-group">';
-                        echo $this->Form->radio('color',
-                            array('black' => __('Black'), 'white' => __('White')),
-                            array('separator' => ' ', 'fieldset' => false,
-                                'legend' => __('Color'), 'hiddenField' => false,
-                                'label' => array('class' => 'radio-inline'),
-                                'default' => 'black')
-                        );
-                        echo '</div>';
+                        if (!empty($colors)) {
+                            echo '<div class="form-group">';
+                            echo $this->Form->radio('color',
+                                $colors,
+                                array('separator' => ' ', 'fieldset' => false,
+                                    'legend' => __('Color'), 'hiddenField' => false,
+                                    'label' => array('class' => 'radio-inline'),
+                                    'default' => $default_color));
+                            echo '</div>';
+                        }
 
-                        echo '<div class="form-group">';
-                        echo $this->Form->radio('mode',
-                            array('regular' => __('Regular'), 'blitz' => __('Blitz')),
-                            array('separator' => ' ', 'fieldset' => false,
-                                'legend' => __('Mode'), 'hiddenField' => false,
-                                'label' => array('class' => 'radio-inline'),
-                                'default' => 'regular'));
-                        echo '</div>';
+                        if (!empty($modes)) {
+                            echo '<div class="form-group">';
+                            echo $this->Form->radio('mode',
+                                $modes,
+                                array('separator' => ' ', 'fieldset' => false,
+                                    'legend' => __('Mode'), 'hiddenField' => false,
+                                    'label' => array('class' => 'radio-inline'),
+                                    'default' => $default_mode));
+                            echo '</div>';
+                        }
 
                         echo '<div class="form-group">';
                         echo $this->Form->radio('type',

@@ -107,7 +107,7 @@ class GamesController extends AppController
         if (array_key_exists('color', $this->params['named'])) {
             $this->set('color', $this->params['named']['color']);
         } else {
-            $this->set('opponent_id', -1);
+            $this->set('color', -1);
         }
     }
 
@@ -131,7 +131,7 @@ class GamesController extends AppController
         if (array_key_exists('color', $this->params['named'])) {
             $this->set('color', $this->params['named']['color']);
         } else {
-            $this->set('opponent_id', -1);
+            $this->set('color', -1);
         }
     }
 }
