@@ -87,6 +87,15 @@ class GamesController extends AppController
         return $this->redirect(array('action' => 'index'));
     }
 
+    public function play_Dvonn()
+    { }
+
+    public function play_Gipf()
+    { }
+
+    public function play_Invers()
+    { }
+
     public function play_Kamisado()
     {
         if (array_key_exists('game_id', $this->params['named'])) {
@@ -111,6 +120,9 @@ class GamesController extends AppController
         }
     }
 
+    public function play_Tzaar()
+    { }
+
     public function play_Yinsh()
     {
         if (array_key_exists('game_id', $this->params['named'])) {
@@ -134,4 +146,7 @@ class GamesController extends AppController
             $this->set('color', -1);
         }
     }
+
+    public function play_Zertz()
+    { }
 }
