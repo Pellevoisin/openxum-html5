@@ -2,17 +2,17 @@ Kamisado.Engine = function (type, color) {
 
 // public methods
     this.current_color = function () {
-        return current_color;
+        return this.color;
     };
 
     this.find_playable_tower = function(color) {
-        var playable_tower=  undefined;
+        var playable_tower =  undefined;
 
-        if (play_color) {
-            var list = get_towers(color);
+        if (this.play_color) {
+            var list = this.get_towers(color);
 
             for (var i = 0; i < 8; ++i) {
-                if (list[i].color == play_color) {
+                if (list[i].color == this.play_color) {
                     playable_tower = { x: list[i].x, y: list[i].y };
                 }
             }
@@ -21,19 +21,19 @@ Kamisado.Engine = function (type, color) {
     };
 
     this.get_black_towers = function() {
-        return black_towers;
+        return this.black_towers;
     };
 
     this.get_current_towers = function() {
-        return  current_color == Kamisado.Color.BLACK ? black_towers : white_towers;
+        return this.color == Kamisado.Color.BLACK ? this.black_towers : this.white_towers;
     };
 
     this.get_play_color = function() {
-        return play_color;
+        return this.play_color;
     };
 
     this.get_white_towers = function() {
-        return white_towers;
+        return this.white_towers;
     };
 
     this.get_possible_moving_list = function(tower) {
@@ -44,7 +44,7 @@ Kamisado.Engine = function (type, color) {
         // column
         var line = tower.y + step;
 
-        while (line != limit && is_empty({x: tower.x, y: line })) {
+        while (line != limit && this.is_empty({x: tower.x, y: line })) {
             list.push({x: tower.x, y: line });
             line += step;
         }
@@ -53,7 +53,7 @@ Kamisado.Engine = function (type, color) {
         var col = tower.x + 1;
 
         line = tower.y + step;
-        while (line != limit && col != 8 && is_empty({x: col, y: line })) {
+        while (line != limit && col != 8 && this.is_empty({x: col, y: line })) {
             list.push({x: col, y: line });
             line += step;
             ++col;
@@ -62,7 +62,7 @@ Kamisado.Engine = function (type, color) {
         // left diagonal
         col = tower.x - 1;
         line = tower.y + step;
-        while (line != limit && col != -1 && is_empty({x: col, y: line })) {
+        while (line != limit && col != -1 && this.is_empty({x: col, y: line })) {
             list.push({x: col, y: line });
             line += step;
             --col;
@@ -71,30 +71,30 @@ Kamisado.Engine = function (type, color) {
     };
 
     this.is_finished = function () {
-        return phase == Kamisado.Phase.FINISH;
+        return this._phase == Kamisado.Phase.FINISH;
     };
 
     this.move_tower = function(selected_tower, selected_cell) {
-        var tower = find_tower(selected_tower, current_color);
+        var tower = this.find_tower(selected_tower, this.color);
 
         if (tower) {
             tower.x = selected_cell.x;
             tower.y = selected_cell.y;
         }
-        if ((current_color == Kamisado.Color.BLACK && tower.y == 7) ||
-            (current_color == Kamisado.Color.WHITE && tower.y == 0)) {
-            phase = Kamisado.Phase.FINISH;
+        if ((this.color == Kamisado.Color.BLACK && tower.y == 7) ||
+            (this.color == Kamisado.Color.WHITE && tower.y == 0)) {
+            this._phase = Kamisado.Phase.FINISH;
         } else {
-            play_color = Kamisado.colors[tower.x][tower.y];
-            if (!this.pass(next_color(current_color))) {
-                change_color();
+            this.play_color = Kamisado.colors[tower.x][tower.y];
+            if (!this.pass(this.next_color(this.color))) {
+                this.change_color();
             } else {
-                var playable_tower = this.find_playable_tower(next_color(current_color));
+                var playable_tower = this.find_playable_tower(this.next_color(this.color));
 
-                play_color = Kamisado.colors[playable_tower.x][playable_tower.y];
-                if (this.pass(current_color)) {
-                    phase = Kamisado.Phase.FINISH;
-                    current_color = next_color(current_color);
+                this.play_color = Kamisado.colors[playable_tower.x][playable_tower.y];
+                if (this.pass(this.color)) {
+                    this._phase = Kamisado.Phase.FINISH;
+                    this.color = this.next_color(this.color);
                 }
             }
         }
@@ -108,25 +108,25 @@ Kamisado.Engine = function (type, color) {
     };
 
     this.phase = function() {
-        return phase;
+        return this._phase;
     };
 
     this.winner_is = function () {
         if (this.is_finished()) {
-            return current_color;
+            return this.color;
         } else {
             return false;
         }
     };
 
 // private methods
-    var change_color = function () {
-        current_color = next_color(current_color);
+    this.change_color = function () {
+        this.color = this.next_color(this.color);
     };
 
-    var find_tower = function(coordinates, color) {
+    this.find_tower = function(coordinates, color) {
         var tower;
-        var list = color == Kamisado.Color.BLACK ? black_towers : white_towers;
+        var list = color == Kamisado.Color.BLACK ? this.black_towers : this.white_towers;
         var found = false;
         var i = 0;
 
@@ -141,16 +141,16 @@ Kamisado.Engine = function (type, color) {
         return tower;
     };
 
-    var get_towers = function(color) {
-        return  color == Kamisado.Color.BLACK ? black_towers : white_towers;
+    this.get_towers = function(color) {
+        return  color == Kamisado.Color.BLACK ? this.black_towers : this.white_towers;
     };
 
-    var is_empty = function(coordinates) {
+    this.is_empty = function(coordinates) {
         var found = false;
         var i = 0;
 
         while (i < 8 && !found) {
-            if (black_towers[i].x == coordinates.x && black_towers[i].y == coordinates.y) {
+            if (this.black_towers[i].x == coordinates.x && this.black_towers[i].y == coordinates.y) {
                 found = true;
             } else {
                 ++i;
@@ -158,7 +158,7 @@ Kamisado.Engine = function (type, color) {
         }
         i = 0;
         while (i < 8 && !found) {
-            if (white_towers[i].x == coordinates.x && white_towers[i].y == coordinates.y) {
+            if (this.white_towers[i].x == coordinates.x && this.white_towers[i].y == coordinates.y) {
                 found = true;
             } else {
                 ++i;
@@ -167,33 +167,33 @@ Kamisado.Engine = function (type, color) {
         return !found;
     };
 
-    var init = function() {
-        black_towers = [];
+    this.init = function() {
+        this.black_towers = [];
         for (var i = 0; i < 8; ++i) {
-            black_towers[i] = { x: i, y: 0, color: Kamisado.colors[i][0] };
+            this.black_towers[i] = { x: i, y: 0, color: Kamisado.colors[i][0] };
         }
-        white_towers = [];
+        this.white_towers = [];
         for (var i = 0; i < 8; ++i) {
-            white_towers[i] = { x: i, y: 7, color: Kamisado.colors[i][7] };
+            this.white_towers[i] = { x: i, y: 7, color: Kamisado.colors[i][7] };
         }
-        phase = Kamisado.Phase.MOVE_TOWER;
-        current_color = Kamisado.Color.BLACK;
-        play_color = undefined;
+        this._phase = Kamisado.Phase.MOVE_TOWER;
+        this.color = Kamisado.Color.BLACK;
+        this.play_color = undefined;
     };
 
-    var next_color = function(color) {
+    this.next_color = function(color) {
         return color == Kamisado.Color.WHITE ? Kamisado.Color.BLACK : Kamisado.Color.WHITE
     };
 
 // private attributes
-    var type = type;
-    var current_color = color;
+    this.type = type;
+    this.color = color;
 
-    var black_towers;
-    var white_towers;
-    var play_color;
+    this.black_towers;
+    this.white_towers;
+    this.play_color;
 
-    var phase;
+    this._phase;
 
-    init();
+    this.init();
 };

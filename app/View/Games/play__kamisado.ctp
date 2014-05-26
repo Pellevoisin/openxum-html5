@@ -36,7 +36,8 @@
     echo $this->Html->script('kamisado/Engine');
     echo $this->Html->script('kamisado/GuiPlayer');
     echo $this->Html->script('kamisado/Manager');
-    echo $this->Html->script('kamisado/RandomPlayer');
+    //    echo $this->Html->script('kamisado/RandomPlayer');
+    echo $this->Html->script('kamisado/MCTSPlayer');
     ?>
 
     <script language="javascript">
@@ -49,7 +50,7 @@
 
             if (<?php echo $game_id; ?> == -1)
             {
-                other = new Kamisado.RandomPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
+                other = new Kamisado.MCTSPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
             }
 
             var manager = new Kamisado.Manager(engine, gui, other);
