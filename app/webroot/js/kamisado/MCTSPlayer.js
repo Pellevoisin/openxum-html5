@@ -74,7 +74,7 @@ Kamisado.MCTSPlayer = function (color, engine) {
     var process_turn = function (e, playable_tower, coordinates) {
         var score = 0;
         e.move_tower(playable_tower, coordinates);
-        for (var i = 0; i < 10; ++i) {
+        for (var i = 0; i < 1000; ++i) {
             var e2 = clone(e);
 
             while (!e2.is_finished()) {
