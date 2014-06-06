@@ -3,7 +3,13 @@ Kamisado.Manager = function (e, gui_player, other_player) {
 // public methods
     this.play = function () {
         if (engine.phase() == Kamisado.Phase.MOVE_TOWER && gui.get_selected_tower() && gui.get_selected_cell()) {
+
+            console.log("play_me");
+
             engine.move_tower(gui.get_selected_tower(), gui.get_selected_cell());
+
+            console.log("coucou");
+
             gui.unselect();
         }
         gui.draw();
@@ -17,9 +23,15 @@ Kamisado.Manager = function (e, gui_player, other_player) {
     };
 
     this.play_other = function() {
+
+        console.log("play_other");
+
         if (engine.phase() == Kamisado.Phase.MOVE_TOWER) {
             other.move_tower();
         }
+
+        console.log("coucou2");
+
         gui.draw();
     };
 

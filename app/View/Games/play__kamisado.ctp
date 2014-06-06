@@ -37,7 +37,9 @@
     echo $this->Html->script('kamisado/GuiPlayer');
     echo $this->Html->script('kamisado/Manager');
     //    echo $this->Html->script('kamisado/RandomPlayer');
-    echo $this->Html->script('kamisado/MCTSPlayer');
+    //    echo $this->Html->script('kamisado/TreeNode');
+    echo $this->Html->script('kamisado/MCTSMinMaxPlayer');
+    //echo $this->Html->script('kamisado/MCTSPlayer');
     ?>
 
     <script language="javascript">
@@ -50,7 +52,7 @@
 
             if (<?php echo $game_id; ?> == -1)
             {
-                other = new Kamisado.MCTSPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
+                other = new Kamisado.MCTSMinMaxPlayer(<?php echo ($color == 'black' ? 1 : 0) ?>, engine);
             }
 
             var manager = new Kamisado.Manager(engine, gui, other);

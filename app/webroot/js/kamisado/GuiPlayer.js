@@ -158,11 +158,14 @@ Kamisado.GuiPlayer = function (color, engine) {
         var found = false;
         var towers;
 
+        console.log("-1-");
+
         if (engine.current_color() == Kamisado.Color.BLACK) {
             towers = engine.get_black_towers();
         } else {
             towers = engine.get_white_towers();
         }
+        console.log("-2-");
         while (!found && k < 8) {
             if (towers[k].x == coordinates.x && towers[k].y == coordinates.y) {
                 found = true;
@@ -170,6 +173,7 @@ Kamisado.GuiPlayer = function (color, engine) {
                 ++k;
             }
         }
+        console.log("-3-");
         if (found) {
             return { x: towers[k].x, y: towers[k].y, color: engine.current_color(), tower_color: towers[k].color };
         } else {
@@ -184,11 +188,15 @@ Kamisado.GuiPlayer = function (color, engine) {
     };
 
     var onClick = function (event) {
+
+        console.log("gui");
+
         var pos = find_pos(canvas);
         var x = event.clientX - pos.x;
         var y = event.clientY - pos.y;
         var ok = false;
         var select = find_tower(x, y);
+
 
         if (select) {
             if (select.color == engine.current_color()) {
